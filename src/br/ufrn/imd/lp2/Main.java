@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * @author Igor Silva
  * @since 2019.2
- * @version 1.0
+ * @version 2.0
  */
 public class Main{
     private static Scanner ler;
