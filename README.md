@@ -1,2 +1,9 @@
-# SistemaDeContaBancaria-LP2
+# Sistema Básico De Conta Bancaria
+
+@author Igor Silva
+
+@since 2019.2
+
+@version 1.0
+
 Um sistema básico de bancos, já implementado as operações de criar conta, remover conta, depositar, sacar, tranferir e gerar relatório das contas existentes.
