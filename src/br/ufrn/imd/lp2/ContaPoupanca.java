@@ -36,7 +36,7 @@ public class ContaPoupanca extends ContaBancaria {
         System.out.println("CPF: " + this.getCPF());
         System.out.println("Numero da Conta: " + this.getNumeroConta());
         System.out.println("Saldo: R$" + this.getSaldo());
-        System.out.println("Limite: " + this.getLimite());
+        System.out.println("Limite: R$" + this.getLimite());
         System.out.println();
 
     }

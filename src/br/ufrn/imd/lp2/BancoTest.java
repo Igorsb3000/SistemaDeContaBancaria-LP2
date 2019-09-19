@@ -6,15 +6,10 @@ import static org.junit.Assert.*;
 
 public class BancoTest {
 
-    @org.junit.Before
-    public void setUp() throws Exception {
-
-    }
-
     @Test
     public void inserirCliente() {
         //Arranje
-        Banco banco = new Banco();
+        Banco banco = new Banco("Caixa");
         ContaBancaria contaCorrente = new ContaCorrente("fulano", "122222", 123, 300);
         ContaBancaria contaPoupanca = new ContaPoupanca("beltrano", "12233", 456, 500);
 
@@ -32,7 +27,7 @@ public class BancoTest {
     @Test
     public void removerCliente(){
         //Arranje
-        Banco banco = new Banco();
+        Banco banco = new Banco("Caixa");
         ContaBancaria contaCorrente = new ContaCorrente("fulano", "122222", 123, 300);
         ContaBancaria contaPoupanca = new ContaPoupanca("beltrano", "12233", 456, 500);
 
@@ -51,7 +46,7 @@ public class BancoTest {
     @Test
     public void procurarCliente(){
         //Arranje
-        Banco banco = new Banco();
+        Banco banco = new Banco("Caixa");
         ContaBancaria contaCorrente = new ContaCorrente("fulano", "122222", 123, 300);
         boolean resultado1;
 

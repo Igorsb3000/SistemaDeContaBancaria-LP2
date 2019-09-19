@@ -36,7 +36,7 @@ public class ContaCorrente extends ContaBancaria implements Imprimivel{
         System.out.println("CPF: " + this.getCPF());
         System.out.println("Numero da Conta: " + this.getNumeroConta());
         System.out.println("Saldo: R$" + this.getSaldo());
-        System.out.println("Taxa de Operacao: " + this.getTaxaDeOperacao());
+        System.out.println("Taxa de Operacao: R$" + this.getTaxaDeOperacao());
         System.out.println();
     }
 

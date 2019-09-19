@@ -14,8 +14,7 @@ public class Main{
 
     public static void main(String[] args) {
         ler = new Scanner(System.in);
-        banco = new Banco();
-        Relatorio relatorio = new Relatorio();
+        banco = new Banco("Bradesco");
         int opcao;
 
         do{
@@ -56,16 +55,19 @@ public class Main{
 
     private static void criarConta() {
         String nome, CPF;
-        int opcao = 0, numero;
+        int opcao = -1, numero;
         Random random;
-        ContaBancaria conta;
+        ContaBancaria conta, auxiliar;
 
-        while(opcao != 1 && opcao != 2){
+        while(opcao != 0 && opcao != 1 && opcao != 2){
+            System.out.println("0- Voltar ao Menu Anterior");
             System.out.println("1- Conta Corrente");
             System.out.println("2- Conta Poupanca");
             opcao = ler.nextInt();
 
             switch (opcao){
+                case 0:
+                    break;
                 case 1:
                     ler.nextLine();
                     System.out.println("Insira o nome: ");
@@ -74,6 +76,11 @@ public class Main{
                     CPF = ler.nextLine();
                     random = new Random();
                     numero = random.nextInt(10000)+1;
+                    auxiliar = banco.procurarConta(numero);
+                    while(auxiliar != null){ //garante um numero unico para cada conta
+                        numero = random.nextInt(10000)+1;
+                        auxiliar = banco.procurarConta(numero);
+                    }
                     conta = new ContaCorrente(nome, CPF, numero, 0);
                     banco.inserir(conta);
                     System.out.println("Numero da sua conta: " + conta.getNumeroConta());
@@ -86,9 +93,17 @@ public class Main{
                     CPF = ler.nextLine();
                     random = new Random();
                     numero = random.nextInt(10000)+1;
+                    auxiliar = banco.procurarConta(numero);
+                    while(auxiliar != null){ //garante um numero unico para cada conta
+                        numero = random.nextInt(10000)+1;
+                        auxiliar = banco.procurarConta(numero);
+                    }
                     conta = new ContaPoupanca(nome, CPF, numero, 0);
                     banco.inserir(conta);
                     System.out.println("Numero da sua conta: " + conta.getNumeroConta());
+                    break;
+                default:
+                    System.out.println("Opcao invalida");
                     break;
             }
 
@@ -129,8 +144,7 @@ public class Main{
                         if(tmp != null){
                             System.out.println("Insira o valor a ser transferido: ");
                             valor = ler.nextDouble();
-                            if(conta.sacar(valor)){
-                                conta.transferir(tmp, valor);
+                            if(conta.transferir(tmp, valor)){
                                 System.out.println("Transferencia feita com sucesso!");
                                 break;
                             }
@@ -159,10 +173,8 @@ public class Main{
 
             if(conta != null){
                 banco.remover(conta);
-                System.out.println("Conta removida com sucesso!");
                 return;
             }
-            System.out.println("Conta inexistente!");
             return;
 
     }
