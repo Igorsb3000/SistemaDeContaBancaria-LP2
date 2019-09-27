@@ -26,6 +26,7 @@ public class Main{
             System.out.println("2- Selecionar Conta");
             System.out.println("3- Remover Conta");
             System.out.println("4- Gerar Relatorio");
+            System.out.println("5- ATUAL");
             opcao = ler.nextInt();
             switch (opcao){
                 case 0:
@@ -42,6 +43,9 @@ public class Main{
                 case 4:
                     gerarRelatorio();
                     break;
+                case 5:
+                    banco.procurarContaPorCPF("101");
+                        break;
                 default:
                     System.out.println("Opcao invalida");
                     break;

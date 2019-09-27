@@ -1,5 +1,7 @@
 package br.ufrn.imd.lp2;
 
+import com.sun.xml.internal.ws.addressing.WsaActionUtil;
+
 import java.util.ArrayList;
 
 public class Banco implements Imprimivel{
@@ -36,6 +38,26 @@ public class Banco implements Imprimivel{
         return false;
     }
 
+    public void encerrarConta(ContaBancaria conta){
+        if(!conta.getAtivo()){
+            System.out.println("Sua conta já está encerrada!");
+        }
+        else{
+            conta.setAtivo(false);
+            System.out.println("Sua conta foi encerrada com sucesso!");
+        }
+    }
+
+    public void configurarConta(ContaBancaria conta, String nome, String cpf){
+        if( !conta.getAtivo()){
+            System.out.println("Conta inativa, não é possivel configura-lá!");
+        }
+        else{
+            conta.setCPF(cpf);
+            conta.setNome(nome);
+        }
+    }
+
     public ContaBancaria procurarConta(int numero){
         for(ContaBancaria x : banco){
             if(x.getNumeroConta() == numero){
@@ -52,6 +74,15 @@ public class Banco implements Imprimivel{
         for(ContaBancaria x : banco){
             x.mostrarDados();
             System.out.println();
+        }
+    }
+
+    public void procurarContaPorTitular(String nomeTitular){
+        for( ContaBancaria contas : banco ){
+            if( contas.getNome().contains(nomeTitular) && contas.getAtivo() ){
+                System.out.println("Nome: " + contas.getNome());
+                System.out.println("Numero da conta: " + contas.getNumeroConta());
+            }
         }
     }
 

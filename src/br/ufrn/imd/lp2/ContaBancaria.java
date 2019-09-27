@@ -5,6 +5,23 @@ public abstract class ContaBancaria {
     private double saldo;
     private String CPF;
     private String nome;
+    private boolean ativo;
+
+    public void setCPF(String CPF) {
+        this.CPF = CPF;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 
     public ContaBancaria(String nome, String CPF, int numero, double saldo) {
         this.nome = nome;
@@ -47,4 +64,6 @@ public abstract class ContaBancaria {
         System.out.println("Nao foi possivel fazer a transferencia");
         return false;
     }
+
+
 }
