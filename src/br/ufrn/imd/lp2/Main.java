@@ -1,5 +1,6 @@
 package br.ufrn.imd.lp2;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -26,7 +27,9 @@ public class Main{
             System.out.println("2- Selecionar Conta");
             System.out.println("3- Remover Conta");
             System.out.println("4- Gerar Relatorio");
-            System.out.println("5- ATUAL");
+            System.out.println("5- Configurar Conta");
+            System.out.println("6- Encerrar Conta");
+            System.out.println("7- Pesquisa por Nome");
             opcao = ler.nextInt();
             switch (opcao){
                 case 0:
@@ -44,8 +47,14 @@ public class Main{
                     gerarRelatorio();
                     break;
                 case 5:
-                    banco.procurarContaPorCPF("101");
-                        break;
+                    editarConta();
+                    break;
+                case 6:
+                    fecharConta();
+                    break;
+                case 7:
+                    pesquisarNomeTitularConta();
+                    break;
                 default:
                     System.out.println("Opcao invalida");
                     break;
@@ -53,7 +62,71 @@ public class Main{
 
         }while(opcao != 0);
 
+    }
 
+    private static void pesquisarNomeTitularConta() {
+        String nome;
+        ArrayList <ContaBancaria> busca = new ArrayList<>();
+
+        ler.nextLine();
+        System.out.println("Insira o nome da busca: ");
+        nome = ler.nextLine();
+
+        //TODO-> tem q converter todas as letras para minusculo para comparar
+
+        busca = banco.procurarContaPorTitular(nome);
+
+        if(busca.size() != 0){
+            for(ContaBancaria conta : busca){
+                conta.mostrarDados();
+            }
+            return;
+        }
+        System.out.println("Nao temos clientes com esse nome");
+        return;
+    }
+
+    private static void fecharConta() {
+        String CPF;
+        int numero;
+
+        System.out.println("Insira o numero da conta: ");
+        numero = ler.nextInt();
+
+        ContaBancaria conta = banco.procurarConta(numero);
+
+        if(conta != null){
+            conta.encerrarConta(conta.getCPF());
+            return;
+        }
+        System.out.println("Conta inexistente");
+        return;
+
+    }
+
+    private static void editarConta() {
+        String nome, CPF;
+        int numero;
+
+        System.out.println("Insira o numero da conta: ");
+        numero = ler.nextInt();
+
+        ContaBancaria conta = banco.procurarConta(numero);
+
+        if(conta != null){
+            ler.nextLine();
+            System.out.println("Insira seu nome: ");
+            nome = ler.nextLine();
+            System.out.println("Insira seu CPF: ");
+            CPF = ler.nextLine();
+
+            //TODO->problema: como passar os novos dados sem escrever por cima, pois precisamos pesquisar os dados antigos
+            //resolvido: passei configurar e encerrar para a classe ContaBancaria
+            conta.configurarConta(nome, CPF);
+            return;
+        }
+        System.out.println("Conta inexistente");
+        return;
 
     }
 

@@ -1,15 +1,19 @@
 package br.ufrn.imd.lp2;
 
-import com.sun.xml.internal.ws.addressing.WsaActionUtil;
+//import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Banco implements Imprimivel{
     private String nomeBanco;
     private ArrayList <ContaBancaria> banco = new ArrayList<ContaBancaria>();
+
     public Banco(String nomeBanco){
         this.nomeBanco = nomeBanco;
     }
+
     public String getNomeBanco(){
         return nomeBanco;
     }
@@ -38,53 +42,60 @@ public class Banco implements Imprimivel{
         return false;
     }
 
-    public void encerrarConta(ContaBancaria conta){
-        if(!conta.getAtivo()){
-            System.out.println("Sua conta já está encerrada!");
-        }
-        else{
-            conta.setAtivo(false);
-            System.out.println("Sua conta foi encerrada com sucesso!");
-        }
-    }
 
-    public void configurarConta(ContaBancaria conta, String nome, String cpf){
-        if( !conta.getAtivo()){
-            System.out.println("Conta inativa, não é possivel configura-lá!");
-        }
-        else{
-            conta.setCPF(cpf);
-            conta.setNome(nome);
-        }
-    }
+
+
 
     public ContaBancaria procurarConta(int numero){
-        for(ContaBancaria x : banco){
-            if(x.getNumeroConta() == numero){
-                return x;
+        for(ContaBancaria conta : banco){
+            if(conta.getNumeroConta() == numero){
+                return conta;
             }
         }
         return null;
     }
 
+    public ArrayList<ContaBancaria> procurarContaPorTitular(String nome){
+        ArrayList<ContaBancaria> tmp = new ArrayList<>();
+        for(ContaBancaria conta : banco){
+            if(conta.getNome().contains(nome)){
+                tmp.add(conta);
+            }
+        }
+        return tmp;
+    }
+    public ArrayList<ContaBancaria> procurarContaPorCPF(String CPF){
+        ArrayList<ContaBancaria> tmp = new ArrayList<>();
+        for(ContaBancaria conta : banco){
+            if(conta.getCPF() == CPF){
+                tmp.add(conta);
+            }
+        }
+        return tmp;
+    }
+
+
+
     public void mostrarDados(){
         System.out.println(" -----------------------------------");
         System.out.println("| *** Clientes do Banco " + this.getNomeBanco() + "*** |  ");
         System.out.println(" -----------------------------------");
+        //Collections.sort(banco);
+
         for(ContaBancaria x : banco){
             x.mostrarDados();
             System.out.println();
         }
     }
 
-    public void procurarContaPorTitular(String nomeTitular){
+    /*public void procurarContaPorTitular(String nomeTitular){
         for( ContaBancaria contas : banco ){
             if( contas.getNome().contains(nomeTitular) && contas.getAtivo() ){
                 System.out.println("Nome: " + contas.getNome());
                 System.out.println("Numero da conta: " + contas.getNumeroConta());
             }
         }
-    }
+    }*/
 
 
 }

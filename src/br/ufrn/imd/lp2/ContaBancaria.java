@@ -1,11 +1,15 @@
 package br.ufrn.imd.lp2;
 
+import java.time.LocalDateTime;
+
 public abstract class ContaBancaria {
     private int numero;
     private double saldo;
     private String CPF;
     private String nome;
-    private boolean ativo;
+    private LocalDateTime dataCadastro = LocalDateTime.now();
+    private LocalDateTime dataEncerramento = null;
+    private boolean ativo = true;
 
     public void setCPF(String CPF) {
         this.CPF = CPF;
@@ -23,11 +27,71 @@ public abstract class ContaBancaria {
         this.ativo = ativo;
     }
 
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public LocalDateTime getDataEncerramento() {
+        return dataEncerramento;
+    }
+
+    public void setDataEncerramento(LocalDateTime dataEncerramento) {
+        this.dataEncerramento = dataEncerramento;
+    }
+
     public ContaBancaria(String nome, String CPF, int numero, double saldo) {
         this.nome = nome;
         this.CPF = CPF;
         this.numero = numero;
         this.saldo = saldo;
+    }
+
+    public void configurarConta(String nome, String CPF){
+        //ContaBancaria tmp = null;
+        /*for(ContaBancaria conta : this.banco){
+            if(conta.getCPF() == CPF){
+                tmp = conta;
+                break;
+            }
+        }*/
+
+        if(!this.getAtivo()){
+            System.out.println("Conta inativa, não é possivel configura-lá!");
+            return;
+        }
+        else{
+            this.setDataCadastro(LocalDateTime.now());
+            this.setCPF(CPF);
+            this.setNome(nome);
+            this.setAtivo(true);
+
+        }
+        return;
+    }
+
+    public void encerrarConta(String CPF){
+        //ContaBancaria tmp = null;
+        /*for(ContaBancaria conta : this.banco){
+            if(conta.getCPF() == CPF){
+                tmp = conta;
+                break;
+            }
+        }*/
+
+        if(!this.getAtivo()){
+            System.out.println("Sua conta já está encerrada!");
+            return;
+        }
+        else{
+            this.setAtivo(false);
+            this.setDataEncerramento(LocalDateTime.now());
+            System.out.println("Sua conta foi encerrada com sucesso!");
+        }
+        return;
     }
 
     public abstract boolean sacar(double valor);
