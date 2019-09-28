@@ -51,4 +51,8 @@ public class ContaCorrente extends ContaBancaria {
         System.out.println();
     }
 
+    @Override
+    public int compareTo(ContaBancaria o) {
+        return this.getNome().compareTo(o.getNome());
+    }
 }

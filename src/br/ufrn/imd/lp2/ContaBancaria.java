@@ -1,8 +1,9 @@
 package br.ufrn.imd.lp2;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
-public abstract class ContaBancaria {
+public abstract class ContaBancaria implements Comparable<ContaBancaria> {
     private int numero;
     private double saldo;
     private String CPF;
@@ -119,6 +120,7 @@ public abstract class ContaBancaria {
 
     public void mostrarDados() {
     }
+
 
     public  boolean transferir(ContaBancaria conta, double valor){
         if(this.sacar(valor) == true){

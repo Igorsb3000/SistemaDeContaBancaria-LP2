@@ -1,6 +1,7 @@
 package br.ufrn.imd.lp2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -18,6 +19,61 @@ public class Main{
         banco = new Banco("Bradesco");
         int opcao;
 
+        ContaBancaria conta1 = new ContaPoupanca("IGOR", "1234", 222, 0);
+        ContaBancaria conta2 = new ContaPoupanca("LINDONILSON", "1234", 112, 0);
+        ContaBancaria conta3 = new ContaCorrente("MARCIO", "12345", 110, 0);
+        ContaBancaria conta4 = new ContaCorrente("LUIZ", "12345", 902, 0);
+        ContaBancaria conta5 = new ContaCorrente("IGOR", "1234567", 2330, 0);
+
+        conta2.encerrarConta("12345");
+        conta5.encerrarConta("1234567");
+
+        banco.inserir(conta1);
+        banco.inserir(conta2);
+        banco.inserir(conta3);
+        banco.inserir(conta4);
+        banco.inserir(conta5);
+
+        System.out.println("***** Ordenado por Nome do Titular *****");
+        Collections.sort(banco.getBanco());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+        System.out.println();
+
+        System.out.println("***** Ordenado por Nome e CPF do Titular *****");
+        Collections.sort(banco.getBanco(), new ContaNomeECPFComparator());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+        System.out.println();
+
+        System.out.println("***** Ordenado pelo Status da Conta *****");
+        Collections.sort(banco.getBanco(), new ContaStatusComparator());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+        System.out.println();
+
+        System.out.println("***** Ordenado por Nome do Titular e pelo Status *****");
+        Collections.sort(banco.getBanco(), new ContaNomeTitularEStatusComparator());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+        System.out.println();
+
+        System.out.println("***** Ordenado por CPF do Titular e pelo Status *****");
+        Collections.sort(banco.getBanco(), new ContaCPFTitularEStatusComparator());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+
+        banco.remover(conta1);
+        banco.remover(conta2);
+        banco.remover(conta3);
+        banco.remover(conta4);
+        banco.remover(conta5);
+
         do{
             System.out.println(" ------ ");
             System.out.println("| MENU |");
@@ -30,6 +86,7 @@ public class Main{
             System.out.println("5- Configurar Conta");
             System.out.println("6- Encerrar Conta");
             System.out.println("7- Pesquisa por Nome");
+            System.out.println("8- Tipos de Ordenacoes");
             opcao = ler.nextInt();
             switch (opcao){
                 case 0:
@@ -55,6 +112,9 @@ public class Main{
                 case 7:
                     pesquisarNomeTitularConta();
                     break;
+                case 8:
+                    ordenarBanco();
+                    break;
                 default:
                     System.out.println("Opcao invalida");
                     break;
@@ -62,6 +122,59 @@ public class Main{
 
         }while(opcao != 0);
 
+    }
+
+    private static void ordenarBanco() {
+        int opcao = -1;
+
+        while(opcao != 0 && opcao != 1 && opcao != 2){
+            System.out.println("0- Voltar ao Menu Anterior");
+            System.out.println("1- Ordenar por Nome do Titular");
+            System.out.println("2- Ordenar por Nome do Titular e pelo CPF");
+            System.out.println("3- Ordenar pelo Status da Conta");
+            System.out.println("4- Ordenar por Nome do Titular e pelo Status");
+            System.out.println("5- Ordenar por CPF e pelo Status");
+            opcao = ler.nextInt();
+
+            switch (opcao){
+                case 0:
+                    break;
+                case 1:
+                    Collections.sort(banco.getBanco());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                case 2:
+                    Collections.sort(banco.getBanco(), new ContaNomeECPFComparator());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                case 3:
+                    Collections.sort(banco.getBanco(), new ContaStatusComparator());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                case 4:
+                    Collections.sort(banco.getBanco(), new ContaNomeTitularEStatusComparator());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                case 5:
+                    Collections.sort(banco.getBanco(), new ContaCPFTitularEStatusComparator());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                default:
+                    System.out.println("Opcao invalida");
+                    break;
+            }
+
+        }
     }
 
     private static void pesquisarNomeTitularConta() {
@@ -72,8 +185,8 @@ public class Main{
         System.out.println("Insira o nome da busca: ");
         nome = ler.nextLine();
 
-        //TODO-> tem q converter todas as letras para minusculo para comparar
-
+        //Transformar todos os caracteres para maiusculo, facilita a busca
+        nome = nome.toUpperCase();
         busca = banco.procurarContaPorTitular(nome);
 
         if(busca.size() != 0){
@@ -87,7 +200,6 @@ public class Main{
     }
 
     private static void fecharConta() {
-        String CPF;
         int numero;
 
         System.out.println("Insira o numero da conta: ");
@@ -158,6 +270,7 @@ public class Main{
                         numero = random.nextInt(10000)+1;
                         auxiliar = banco.procurarConta(numero);
                     }
+                    nome = nome.toUpperCase();
                     conta = new ContaCorrente(nome, CPF, numero, 0);
                     banco.inserir(conta);
                     System.out.println("Numero da sua conta: " + conta.getNumeroConta());
@@ -175,6 +288,7 @@ public class Main{
                         numero = random.nextInt(10000)+1;
                         auxiliar = banco.procurarConta(numero);
                     }
+                    nome = nome.toUpperCase();
                     conta = new ContaPoupanca(nome, CPF, numero, 0);
                     banco.inserir(conta);
                     System.out.println("Numero da sua conta: " + conta.getNumeroConta());

@@ -1,14 +1,12 @@
 package br.ufrn.imd.lp2;
 
 //import com.sun.xml.internal.ws.addressing.WsaActionUtil;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 public class Banco implements Imprimivel{
     private String nomeBanco;
-    private ArrayList <ContaBancaria> banco = new ArrayList<ContaBancaria>();
+    private List <ContaBancaria> banco = new ArrayList<ContaBancaria>();
 
     public Banco(String nomeBanco){
         this.nomeBanco = nomeBanco;
@@ -16,6 +14,10 @@ public class Banco implements Imprimivel{
 
     public String getNomeBanco(){
         return nomeBanco;
+    }
+
+    public List<ContaBancaria> getBanco() {
+        return banco;
     }
 
     public boolean inserir(ContaBancaria conta){
