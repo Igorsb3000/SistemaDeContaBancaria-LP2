@@ -3,7 +3,7 @@ package br.ufrn.imd.lp2;
 import java.util.*;
 
 /**
- * @authors Igor Silva, Marcio Tenorio, Lindonilson de Oliveira e Luiz Lopes (GRUPO 3)
+ * @author Igor Silva, Marcio Tenorio, Lindonilson de Oliveira e Luiz Lopes (GRUPO 3)
  * @since 2019.2
  * @version 2.0.2
  */
@@ -195,7 +195,7 @@ public class Main{
 
     private static void pesquisarCPFTitularConta() {
         String CPF;
-        List<ContaBancaria> busca = new ArrayList<>();
+        List<ContaBancaria> busca;
 
         ler.nextLine();
         System.out.println("Insira o CPF da busca: ");
@@ -210,11 +210,10 @@ public class Main{
             return;
         }
         System.out.println("Nao temos clientes com esse CPF");
-        return;
     }
     private static void pesquisarNomeTitularConta() {
         String nome;
-        List<ContaBancaria> busca = new ArrayList<>();
+        List<ContaBancaria> busca;
 
         ler.nextLine();
         System.out.println("Insira o nome da busca: ");
@@ -231,7 +230,6 @@ public class Main{
             return;
         }
         System.out.println("Nao temos clientes com esse nome");
-        return;
     }
 
     private static void fecharConta() {
@@ -247,8 +245,6 @@ public class Main{
             return;
         }
         System.out.println("Conta inexistente");
-        return;
-
     }
 
     private static void editarConta() {
@@ -271,8 +267,6 @@ public class Main{
             return;
         }
         System.out.println("Conta inexistente");
-        return;
-
     }
 
     private static void criarConta() {
@@ -297,7 +291,7 @@ public class Main{
                     System.out.println("Insira seu CPF: ");
                     CPF = ler.nextLine();
                     nome = nome.toUpperCase();
-                    if(banco.validarCliente(nome, CPF) == false){
+                    if(!banco.validarCliente(nome, CPF)){
                         System.out.println("Cliente ja possui cadastro com outros dados");
                         break;
                     }
@@ -394,7 +388,6 @@ public class Main{
 
         }else{
             System.out.println("Conta Inexistente");
-            return;
         }
     }
 
@@ -408,8 +401,6 @@ public class Main{
                 banco.remover(conta);
                 return;
             }
-            return;
-
     }
     private  static void gerarRelatorio(){
         banco.mostrarDados();

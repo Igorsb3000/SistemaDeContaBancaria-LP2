@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Banco implements Imprimivel{
     private String nomeBanco;
-    private List <ContaBancaria> banco = new ArrayList<ContaBancaria>();
+    private ArrayList <ContaBancaria> banco = new ArrayList<>();
 
     public Banco(String nomeBanco){
         this.nomeBanco = nomeBanco;
@@ -15,7 +15,7 @@ public class Banco implements Imprimivel{
         return nomeBanco;
     }
 
-    public List<ContaBancaria> getBanco() {
+    public ArrayList<ContaBancaria> getBanco() {
         return banco;
     }
 
@@ -84,28 +84,15 @@ public class Banco implements Imprimivel{
         return tmp;
     }
 
-
-
     public void mostrarDados(){
         System.out.println(" -----------------------------------");
         System.out.println("| *** Clientes do Banco " + this.getNomeBanco() + "*** |  ");
         System.out.println(" -----------------------------------");
-        //Collections.sort(banco);
 
         for(ContaBancaria x : banco){
             x.mostrarDados();
             System.out.println();
         }
     }
-
-    /*public void procurarContaPorTitular(String nomeTitular){
-        for( ContaBancaria contas : banco ){
-            if( contas.getNome().contains(nomeTitular) && contas.getAtivo() ){
-                System.out.println("Nome: " + contas.getNome());
-                System.out.println("Numero da conta: " + contas.getNumeroConta());
-            }
-        }
-    }*/
-
 
 }
