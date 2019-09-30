@@ -1,5 +1,6 @@
 package br.ufrn.imd.lp2;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ContaCorrente extends ContaBancaria {
@@ -11,6 +12,30 @@ public class ContaCorrente extends ContaBancaria {
 
     public double getTaxaDeOperacao(){
         return taxaDeOperacao;
+    }
+
+    @Override
+    public void configurarConta(String nome, String CPF) {
+        this.setDataCadastro(LocalDateTime.now());
+        this.setCPF(CPF);
+        this.setNome(nome);
+        this.setAtivo(true);
+        this.setDataEncerramento(null);
+        return;
+    }
+
+    @Override
+    public void encerrarConta(String CPF) {
+        if(!this.getAtivo()){
+            System.out.println("Sua conta já está encerrada!");
+            return;
+        }
+        else{
+            this.setAtivo(false);
+            this.setDataEncerramento(LocalDateTime.now());
+            System.out.println("Sua conta foi encerrada com sucesso!");
+        }
+        return;
     }
 
     @Override

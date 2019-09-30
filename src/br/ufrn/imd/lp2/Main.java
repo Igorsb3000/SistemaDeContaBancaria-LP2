@@ -1,14 +1,11 @@
 package br.ufrn.imd.lp2;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 /**
- * @author Igor Silva
+ * @authors Igor Silva, Marcio Tenorio, Lindonilson de Oliveira e Luiz Lopes (GRUPO 3)
  * @since 2019.2
- * @version 2.0
+ * @version 2.0.2
  */
 public class Main{
     private static Scanner ler;
@@ -19,14 +16,11 @@ public class Main{
         banco = new Banco("Bradesco");
         int opcao;
 
-        ContaBancaria conta1 = new ContaPoupanca("IGOR", "1234", 222, 0);
-        ContaBancaria conta2 = new ContaPoupanca("LINDONILSON", "1234", 112, 0);
-        ContaBancaria conta3 = new ContaCorrente("MARCIO", "12345", 110, 0);
-        ContaBancaria conta4 = new ContaCorrente("LUIZ", "12345", 902, 0);
-        ContaBancaria conta5 = new ContaCorrente("IGOR", "1234567", 2330, 0);
-
-        conta2.encerrarConta("12345");
-        conta5.encerrarConta("1234567");
+        ContaBancaria conta1 = new ContaPoupanca("JOAO", "12345", 222, 100.00);
+        ContaBancaria conta2 = new ContaPoupanca("MARIA", "1234", 112, 200.00);
+        ContaBancaria conta3 = new ContaCorrente("JOAO", "123456", 110, 50.00);
+        ContaBancaria conta4 = new ContaCorrente("MARIA", "1234", 902, 10.00);
+        ContaBancaria conta5 = new ContaCorrente("ZECA", "1234567", 2330, 250.00);
 
         banco.inserir(conta1);
         banco.inserir(conta2);
@@ -34,8 +28,18 @@ public class Main{
         banco.inserir(conta4);
         banco.inserir(conta5);
 
+        conta1.encerrarConta("12345");
+        conta2.encerrarConta("1234");
+
         System.out.println("***** Ordenado por Nome do Titular *****");
         Collections.sort(banco.getBanco());
+        for(ContaBancaria conta : banco.getBanco()){
+            conta.mostrarDados();
+        }
+        System.out.println();
+
+        System.out.println("***** Ordenado pelo CPF do Titular *****");
+        Collections.sort(banco.getBanco(), new ContaCPFComparator());
         for(ContaBancaria conta : banco.getBanco()){
             conta.mostrarDados();
         }
@@ -86,7 +90,8 @@ public class Main{
             System.out.println("5- Configurar Conta");
             System.out.println("6- Encerrar Conta");
             System.out.println("7- Pesquisa por Nome");
-            System.out.println("8- Tipos de Ordenacoes");
+            System.out.println("8- Pesquisa por CPF");
+            System.out.println("9- Tipos de Ordenacoes");
             opcao = ler.nextInt();
             switch (opcao){
                 case 0:
@@ -113,6 +118,9 @@ public class Main{
                     pesquisarNomeTitularConta();
                     break;
                 case 8:
+                    pesquisarCPFTitularConta();
+                    break;
+                case 9:
                     ordenarBanco();
                     break;
                 default:
@@ -124,16 +132,18 @@ public class Main{
 
     }
 
+
     private static void ordenarBanco() {
         int opcao = -1;
 
         while(opcao != 0 && opcao != 1 && opcao != 2){
             System.out.println("0- Voltar ao Menu Anterior");
             System.out.println("1- Ordenar por Nome do Titular");
-            System.out.println("2- Ordenar por Nome do Titular e pelo CPF");
-            System.out.println("3- Ordenar pelo Status da Conta");
-            System.out.println("4- Ordenar por Nome do Titular e pelo Status");
-            System.out.println("5- Ordenar por CPF e pelo Status");
+            System.out.println("2- Ordenar pelo CPF do Titular");
+            System.out.println("3- Ordenar por Nome do Titular e pelo CPF");
+            System.out.println("4- Ordenar pelo Status da Conta");
+            System.out.println("5- Ordenar por Nome do Titular e pelo Status");
+            System.out.println("6- Ordenar por CPF e pelo Status");
             opcao = ler.nextInt();
 
             switch (opcao){
@@ -146,24 +156,30 @@ public class Main{
                     }
                     break;
                 case 2:
-                    Collections.sort(banco.getBanco(), new ContaNomeECPFComparator());
+                    Collections.sort(banco.getBanco(), new ContaCPFComparator());
                     for(ContaBancaria conta : banco.getBanco()){
                         conta.mostrarDados();
                     }
                     break;
                 case 3:
-                    Collections.sort(banco.getBanco(), new ContaStatusComparator());
+                    Collections.sort(banco.getBanco(), new ContaNomeECPFComparator());
                     for(ContaBancaria conta : banco.getBanco()){
                         conta.mostrarDados();
                     }
                     break;
                 case 4:
-                    Collections.sort(banco.getBanco(), new ContaNomeTitularEStatusComparator());
+                    Collections.sort(banco.getBanco(), new ContaStatusComparator());
                     for(ContaBancaria conta : banco.getBanco()){
                         conta.mostrarDados();
                     }
                     break;
                 case 5:
+                    Collections.sort(banco.getBanco(), new ContaNomeTitularEStatusComparator());
+                    for(ContaBancaria conta : banco.getBanco()){
+                        conta.mostrarDados();
+                    }
+                    break;
+                case 6:
                     Collections.sort(banco.getBanco(), new ContaCPFTitularEStatusComparator());
                     for(ContaBancaria conta : banco.getBanco()){
                         conta.mostrarDados();
@@ -177,9 +193,28 @@ public class Main{
         }
     }
 
+    private static void pesquisarCPFTitularConta() {
+        String CPF;
+        List<ContaBancaria> busca = new ArrayList<>();
+
+        ler.nextLine();
+        System.out.println("Insira o CPF da busca: ");
+        CPF = ler.nextLine();
+
+        busca = banco.procurarContaPorCPF(CPF);
+
+        if(busca.size() != 0){
+            for(ContaBancaria conta : busca){
+                conta.mostrarDados();
+            }
+            return;
+        }
+        System.out.println("Nao temos clientes com esse CPF");
+        return;
+    }
     private static void pesquisarNomeTitularConta() {
         String nome;
-        ArrayList <ContaBancaria> busca = new ArrayList<>();
+        List<ContaBancaria> busca = new ArrayList<>();
 
         ler.nextLine();
         System.out.println("Insira o nome da busca: ");
@@ -231,9 +266,7 @@ public class Main{
             nome = ler.nextLine();
             System.out.println("Insira seu CPF: ");
             CPF = ler.nextLine();
-
-            //TODO->problema: como passar os novos dados sem escrever por cima, pois precisamos pesquisar os dados antigos
-            //resolvido: passei configurar e encerrar para a classe ContaBancaria
+            nome = nome.toUpperCase();
             conta.configurarConta(nome, CPF);
             return;
         }
@@ -263,6 +296,11 @@ public class Main{
                     nome = ler.nextLine();
                     System.out.println("Insira seu CPF: ");
                     CPF = ler.nextLine();
+                    nome = nome.toUpperCase();
+                    if(banco.validarCliente(nome, CPF) == false){
+                        System.out.println("Cliente ja possui cadastro com outros dados");
+                        break;
+                    }
                     random = new Random();
                     numero = random.nextInt(10000)+1;
                     auxiliar = banco.procurarConta(numero);
@@ -270,7 +308,6 @@ public class Main{
                         numero = random.nextInt(10000)+1;
                         auxiliar = banco.procurarConta(numero);
                     }
-                    nome = nome.toUpperCase();
                     conta = new ContaCorrente(nome, CPF, numero, 0);
                     banco.inserir(conta);
                     System.out.println("Numero da sua conta: " + conta.getNumeroConta());
@@ -281,6 +318,11 @@ public class Main{
                     nome = ler.nextLine();
                     System.out.println("Insira seu CPF: ");
                     CPF = ler.nextLine();
+                    nome = nome.toUpperCase();
+                    if(!banco.validarCliente(nome, CPF)){
+                        System.out.println("Cliente ja possui cadastro com outros dados");
+                        break;
+                    }
                     random = new Random();
                     numero = random.nextInt(10000)+1;
                     auxiliar = banco.procurarConta(numero);
@@ -372,5 +414,4 @@ public class Main{
     private  static void gerarRelatorio(){
         banco.mostrarDados();
     }
-
 }

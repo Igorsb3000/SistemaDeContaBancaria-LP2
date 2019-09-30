@@ -1,7 +1,6 @@
 package br.ufrn.imd.lp2;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 
 public abstract class ContaBancaria implements Comparable<ContaBancaria> {
     private int numero;
@@ -51,49 +50,8 @@ public abstract class ContaBancaria implements Comparable<ContaBancaria> {
         this.saldo = saldo;
     }
 
-    public void configurarConta(String nome, String CPF){
-        //ContaBancaria tmp = null;
-        /*for(ContaBancaria conta : this.banco){
-            if(conta.getCPF() == CPF){
-                tmp = conta;
-                break;
-            }
-        }*/
-
-        if(!this.getAtivo()){
-            System.out.println("Conta inativa, não é possivel configura-lá!");
-            return;
-        }
-        else{
-            this.setDataCadastro(LocalDateTime.now());
-            this.setCPF(CPF);
-            this.setNome(nome);
-            this.setAtivo(true);
-
-        }
-        return;
-    }
-
-    public void encerrarConta(String CPF){
-        //ContaBancaria tmp = null;
-        /*for(ContaBancaria conta : this.banco){
-            if(conta.getCPF() == CPF){
-                tmp = conta;
-                break;
-            }
-        }*/
-
-        if(!this.getAtivo()){
-            System.out.println("Sua conta já está encerrada!");
-            return;
-        }
-        else{
-            this.setAtivo(false);
-            this.setDataEncerramento(LocalDateTime.now());
-            System.out.println("Sua conta foi encerrada com sucesso!");
-        }
-        return;
-    }
+    public abstract void configurarConta(String nome, String CPF);
+    public abstract void encerrarConta(String CPF);
 
     public abstract boolean sacar(double valor);
     public abstract boolean depositar(double valor);
@@ -118,9 +76,7 @@ public abstract class ContaBancaria implements Comparable<ContaBancaria> {
         this.saldo = saldo;
     }
 
-    public void mostrarDados() {
-    }
-
+    public abstract void mostrarDados();
 
     public  boolean transferir(ContaBancaria conta, double valor){
         if(this.sacar(valor) == true){

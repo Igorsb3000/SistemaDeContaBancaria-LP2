@@ -1,6 +1,5 @@
 package br.ufrn.imd.lp2;
 
-//import com.sun.xml.internal.ws.addressing.WsaActionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +19,18 @@ public class Banco implements Imprimivel{
         return banco;
     }
 
+    //Uma pessoa pode ter mais de uma conta, porem cada pessoa tem apenas um CPF
+    public boolean validarCliente(String nome, String CPF){
+        for(ContaBancaria conta : banco){
+            if(conta.getCPF().equals(CPF)) {
+                if(!conta.getNome().equals(nome)){
+                    return false;
+                }
+                return true;
+            }
+        }
+        return true;
+    }
     public boolean inserir(ContaBancaria conta){
         if(!banco.contains(conta)){
             banco.add(conta);
@@ -45,9 +56,6 @@ public class Banco implements Imprimivel{
     }
 
 
-
-
-
     public ContaBancaria procurarConta(int numero){
         for(ContaBancaria conta : banco){
             if(conta.getNumeroConta() == numero){
@@ -57,8 +65,8 @@ public class Banco implements Imprimivel{
         return null;
     }
 
-    public ArrayList<ContaBancaria> procurarContaPorTitular(String nome){
-        ArrayList<ContaBancaria> tmp = new ArrayList<>();
+    public List<ContaBancaria> procurarContaPorTitular(String nome){
+        List<ContaBancaria> tmp = new ArrayList<>();
         for(ContaBancaria conta : banco){
             if(conta.getNome().contains(nome)){
                 tmp.add(conta);
@@ -66,8 +74,8 @@ public class Banco implements Imprimivel{
         }
         return tmp;
     }
-    public ArrayList<ContaBancaria> procurarContaPorCPF(String CPF){
-        ArrayList<ContaBancaria> tmp = new ArrayList<>();
+    public List<ContaBancaria> procurarContaPorCPF(String CPF){
+        List<ContaBancaria> tmp = new ArrayList<>();
         for(ContaBancaria conta : banco){
             if(conta.getCPF() == CPF){
                 tmp.add(conta);

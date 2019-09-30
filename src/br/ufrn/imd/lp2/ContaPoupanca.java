@@ -1,5 +1,6 @@
 package br.ufrn.imd.lp2;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ContaPoupanca extends ContaBancaria {
@@ -7,6 +8,36 @@ public class ContaPoupanca extends ContaBancaria {
 
     public ContaPoupanca(String nome, String CPF, int numero, double saldo){
         super(nome, CPF, numero, saldo);
+    }
+
+    @Override
+    public void configurarConta(String nome, String CPF) {
+        /*if(!this.getAtivo()){
+            System.out.println("Conta inativa, não é possivel configura-lá!");
+            return;
+        }
+        else{*/
+            this.setDataCadastro(LocalDateTime.now());
+            this.setCPF(CPF);
+            this.setNome(nome);
+            this.setAtivo(true);
+            this.setDataEncerramento(null);
+        //}
+        return;
+    }
+
+    @Override
+    public void encerrarConta(String CPF) {
+        if(!this.getAtivo()){
+            System.out.println("Sua conta já está encerrada!");
+            return;
+        }
+        else{
+            this.setAtivo(false);
+            this.setDataEncerramento(LocalDateTime.now());
+            System.out.println("Sua conta foi encerrada com sucesso!");
+        }
+        return;
     }
 
     public double getLimite(){
@@ -51,9 +82,9 @@ public class ContaPoupanca extends ContaBancaria {
         System.out.println();
 
     }
+
     @Override
     public int compareTo(ContaBancaria o) {
         return this.getNome().compareTo(o.getNome());
     }
-
 }
