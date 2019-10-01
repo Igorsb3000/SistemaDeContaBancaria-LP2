@@ -7,9 +7,9 @@ public abstract class ContaBancaria implements Comparable<ContaBancaria> {
     private double saldo;
     private String CPF;
     private String nome;
-    private LocalDateTime dataCadastro = LocalDateTime.now();
-    private LocalDateTime dataEncerramento = null;
-    private boolean ativo = true;
+    private LocalDateTime dataCadastro;
+    private LocalDateTime dataEncerramento;
+    private boolean ativo;
 
     public void setCPF(String CPF) {
         this.CPF = CPF;
@@ -43,15 +43,17 @@ public abstract class ContaBancaria implements Comparable<ContaBancaria> {
         this.dataEncerramento = dataEncerramento;
     }
 
-    public ContaBancaria(String nome, String CPF, int numero, double saldo) {
+    public ContaBancaria(String nome, String CPF, int numero, double saldo, LocalDateTime dataCadastro, LocalDateTime dataEncerramento, boolean ativo) {
         this.nome = nome;
         this.CPF = CPF;
         this.numero = numero;
         this.saldo = saldo;
+        this.dataCadastro = dataCadastro;
+        this.dataEncerramento = dataEncerramento;
+        this.ativo = ativo;
     }
 
     public abstract void configurarConta(String nome, String CPF);
-    public abstract void encerrarConta(String CPF);
 
     public abstract boolean sacar(double valor);
     public abstract boolean depositar(double valor);
@@ -79,7 +81,7 @@ public abstract class ContaBancaria implements Comparable<ContaBancaria> {
     public abstract void mostrarDados();
 
     public  boolean transferir(ContaBancaria conta, double valor){
-        if(this.sacar(valor) == true){
+        if(this.sacar(valor)){
             conta.depositar(valor);
             return true;
         }

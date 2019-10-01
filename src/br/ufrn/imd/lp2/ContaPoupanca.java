@@ -6,39 +6,19 @@ import java.time.format.DateTimeFormatter;
 public class ContaPoupanca extends ContaBancaria {
     private double limite = 500;
 
-    public ContaPoupanca(String nome, String CPF, int numero, double saldo){
-        super(nome, CPF, numero, saldo);
+    public ContaPoupanca(String nome, String CPF, int numero, double saldo, LocalDateTime dataCadastro, LocalDateTime dataEncerramento, boolean ativo){
+        super(nome, CPF, numero, saldo, dataCadastro, dataEncerramento, ativo);
     }
 
     @Override
     public void configurarConta(String nome, String CPF) {
-        /*if(!this.getAtivo()){
-            System.out.println("Conta inativa, não é possivel configura-lá!");
-            return;
-        }
-        else{*/
             this.setDataCadastro(LocalDateTime.now());
             this.setCPF(CPF);
             this.setNome(nome);
             this.setAtivo(true);
             this.setDataEncerramento(null);
-        //}
-        return;
     }
 
-    @Override
-    public void encerrarConta(String CPF) {
-        if(!this.getAtivo()){
-            System.out.println("Sua conta já está encerrada!");
-            return;
-        }
-        else{
-            this.setAtivo(false);
-            this.setDataEncerramento(LocalDateTime.now());
-            System.out.println("Sua conta foi encerrada com sucesso!");
-        }
-        return;
-    }
 
     public double getLimite(){
         return limite;
@@ -46,9 +26,8 @@ public class ContaPoupanca extends ContaBancaria {
 
     @Override
     public boolean sacar(double valor) {
-        double saque = valor;
-        if(this.getSaldo() - saque >= this.getLimite() * -1){
-            this.setSaldo(this.getSaldo() - saque);
+        if(this.getSaldo() - valor >= this.getLimite() * -1){
+            this.setSaldo(this.getSaldo() - valor);
             return true;
         }
         System.out.println("Saque invalido, ultrapassou o limite");

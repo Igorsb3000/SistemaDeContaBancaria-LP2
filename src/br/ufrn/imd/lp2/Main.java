@@ -1,5 +1,6 @@
 package br.ufrn.imd.lp2;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -15,21 +16,19 @@ public class Main{
         ler = new Scanner(System.in);
         banco = new Banco("Bradesco");
         int opcao;
+        LocalDateTime dataAtual = LocalDateTime.now();
 
-        ContaBancaria conta1 = new ContaPoupanca("JOAO", "12345", 222, 100.00);
-        ContaBancaria conta2 = new ContaPoupanca("MARIA", "1234", 112, 200.00);
-        ContaBancaria conta3 = new ContaCorrente("JOAO", "123456", 110, 50.00);
-        ContaBancaria conta4 = new ContaCorrente("MARIA", "1234", 902, 10.00);
-        ContaBancaria conta5 = new ContaCorrente("ZECA", "1234567", 2330, 250.00);
+        ContaBancaria conta1 = new ContaPoupanca("JOAO", "100.000.000-11", 222, 100.00, dataAtual, dataAtual, false);
+        ContaBancaria conta2 = new ContaPoupanca("MARIA", "100.000.000-02", 112, 200.00, dataAtual, null, true);
+        ContaBancaria conta3 = new ContaCorrente("JOAO", "100.000.000-01", 110, 50.00, dataAtual, null, true);
+        ContaBancaria conta4 = new ContaCorrente("MARIA", "100.000.000-02", 902, 10.00, dataAtual, dataAtual, false);
+        ContaBancaria conta5 = new ContaCorrente("ZECA", "100.000.000-03", 2330, 250.00, dataAtual, null, true);
 
         banco.inserir(conta1);
         banco.inserir(conta2);
         banco.inserir(conta3);
         banco.inserir(conta4);
         banco.inserir(conta5);
-
-        conta1.encerrarConta("12345");
-        conta2.encerrarConta("1234");
 
         System.out.println("***** Ordenado por Nome do Titular *****");
         Collections.sort(banco.getBanco());
@@ -112,7 +111,7 @@ public class Main{
                     editarConta();
                     break;
                 case 6:
-                    fecharConta();
+                    desativarConta();
                     break;
                 case 7:
                     pesquisarNomeTitularConta();
@@ -198,8 +197,10 @@ public class Main{
         List<ContaBancaria> busca;
 
         ler.nextLine();
-        System.out.println("Insira o CPF da busca: ");
-        CPF = ler.nextLine();
+        do {
+            System.out.println("Insira o CPF para busca(ex: 100.000.000-00): ");
+            CPF = ler.nextLine();
+        }while(CPF.length() != 14 || CPF.charAt(3) != '.' || CPF.charAt(7) != '.' || CPF.charAt(11) != '-');
 
         busca = banco.procurarContaPorCPF(CPF);
 
@@ -232,19 +233,14 @@ public class Main{
         System.out.println("Nao temos clientes com esse nome");
     }
 
-    private static void fecharConta() {
-        int numero;
-
-        System.out.println("Insira o numero da conta: ");
-        numero = ler.nextInt();
-
-        ContaBancaria conta = banco.procurarConta(numero);
-
-        if(conta != null){
-            conta.encerrarConta(conta.getCPF());
-            return;
-        }
-        System.out.println("Conta inexistente");
+    private static void desativarConta() {
+        String CPF;
+        ler.nextLine();
+        do {
+            System.out.println("Insira seu CPF(ex: 100.000.000-00): ");
+            CPF = ler.nextLine();
+        }while(CPF.length() != 14 || CPF.charAt(3) != '.' || CPF.charAt(7) != '.' || CPF.charAt(11) != '-');
+        banco.encerrarConta(CPF);
     }
 
     private static void editarConta() {
@@ -260,8 +256,10 @@ public class Main{
             ler.nextLine();
             System.out.println("Insira seu nome: ");
             nome = ler.nextLine();
-            System.out.println("Insira seu CPF: ");
-            CPF = ler.nextLine();
+            do {
+                System.out.println("Insira seu CPF(ex: 100.000.000-00): ");
+                CPF = ler.nextLine();
+            }while(CPF.length() != 14 || CPF.charAt(3) != '.' || CPF.charAt(7) != '.' || CPF.charAt(11) != '-');
             nome = nome.toUpperCase();
             conta.configurarConta(nome, CPF);
             return;
@@ -271,14 +269,12 @@ public class Main{
 
     private static void criarConta() {
         String nome, CPF;
-        int opcao = -1, numero;
-        Random random;
-        ContaBancaria conta, auxiliar;
+        int opcao = -1;
+        ContaBancaria conta;
 
         while(opcao != 0 && opcao != 1 && opcao != 2){
             System.out.println("0- Voltar ao Menu Anterior");
-            System.out.println("1- Conta Corrente");
-            System.out.println("2- Conta Poupanca");
+            System.out.println("1- Fazer o Cadastro");
             opcao = ler.nextInt();
 
             switch (opcao){
@@ -288,46 +284,17 @@ public class Main{
                     ler.nextLine();
                     System.out.println("Insira o nome: ");
                     nome = ler.nextLine();
-                    System.out.println("Insira seu CPF: ");
-                    CPF = ler.nextLine();
+                    do {
+                        System.out.println("Insira seu CPF(ex: 100.000.000-00): ");
+                        CPF = ler.nextLine();
+                    }while(CPF.length() != 14 || CPF.charAt(3) != '.' || CPF.charAt(7) != '.' || CPF.charAt(11) != '-');
+
                     nome = nome.toUpperCase();
-                    if(!banco.validarCliente(nome, CPF)){
-                        System.out.println("Cliente ja possui cadastro com outros dados");
+                    conta = banco.criarConta(nome, CPF);
+                    if(conta != null){
+                        System.out.println("Numero da sua conta: " + conta.getNumeroConta());
                         break;
                     }
-                    random = new Random();
-                    numero = random.nextInt(10000)+1;
-                    auxiliar = banco.procurarConta(numero);
-                    while(auxiliar != null){ //garante um numero unico para cada conta
-                        numero = random.nextInt(10000)+1;
-                        auxiliar = banco.procurarConta(numero);
-                    }
-                    conta = new ContaCorrente(nome, CPF, numero, 0);
-                    banco.inserir(conta);
-                    System.out.println("Numero da sua conta: " + conta.getNumeroConta());
-                    break;
-                case 2:
-                    ler.nextLine();
-                    System.out.println("Insira o nome: ");
-                    nome = ler.nextLine();
-                    System.out.println("Insira seu CPF: ");
-                    CPF = ler.nextLine();
-                    nome = nome.toUpperCase();
-                    if(!banco.validarCliente(nome, CPF)){
-                        System.out.println("Cliente ja possui cadastro com outros dados");
-                        break;
-                    }
-                    random = new Random();
-                    numero = random.nextInt(10000)+1;
-                    auxiliar = banco.procurarConta(numero);
-                    while(auxiliar != null){ //garante um numero unico para cada conta
-                        numero = random.nextInt(10000)+1;
-                        auxiliar = banco.procurarConta(numero);
-                    }
-                    nome = nome.toUpperCase();
-                    conta = new ContaPoupanca(nome, CPF, numero, 0);
-                    banco.inserir(conta);
-                    System.out.println("Numero da sua conta: " + conta.getNumeroConta());
                     break;
                 default:
                     System.out.println("Opcao invalida");
@@ -399,7 +366,6 @@ public class Main{
 
             if(conta != null){
                 banco.remover(conta);
-                return;
             }
     }
     private  static void gerarRelatorio(){
