@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-public class ContaCorrente extends ContaBancaria {
+public class ContaCorrente extends ContaBancaria implements Imprimivel{
     private double taxaDeOperacao = 5.00;
 
     public ContaCorrente(String nome, String CPF, int numero, double saldo, LocalDateTime dataCadastro, LocalDateTime dataEncerramento, boolean ativo){

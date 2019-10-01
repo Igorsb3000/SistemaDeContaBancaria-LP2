@@ -3,7 +3,7 @@ package br.ufrn.imd.lp2;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ContaPoupanca extends ContaBancaria {
+public class ContaPoupanca extends ContaBancaria implements Imprimivel {
     private double limite = 500;
 
     public ContaPoupanca(String nome, String CPF, int numero, double saldo, LocalDateTime dataCadastro, LocalDateTime dataEncerramento, boolean ativo){
